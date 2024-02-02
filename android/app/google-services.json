@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "153351398645",
+    "firebase_url": "https://electronics-34416-default-rtdb.firebaseio.com",
+    "project_id": "electronics-34416",
+    "storage_bucket": "electronics-34416.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153351398645:android:4b2488cc96389a029891bc",
+        "android_client_info": {
+          "package_name": "com.example.motor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAJrbdYdQ9bHigOzr_GsXYSHvU5GUVB4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
