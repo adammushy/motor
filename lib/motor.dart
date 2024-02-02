@@ -36,30 +36,39 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('System Dashboard'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Dashboard Widgets
-          DashboardWidget(),
-
-          SizedBox(height: 20),
-
-          // System Control Buttons
-          SystemControlButtons(),
-
-          SizedBox(height: 20),
-
-          // Log Button
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LogScreen()),
-              );
-            },
-            child: Text('View System Log'),
+      // backgroundColor: Colors.amber,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(""), // Replace with your image asset path
+            fit: BoxFit.cover,
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Dashboard Widgets
+            DashboardWidget(),
+      
+            SizedBox(height: 20),
+      
+            // System Control Buttons
+            // SystemControlButtons(),
+      
+            // SizedBox(height: 20),
+      
+            // // Log Button
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => LogScreen()),
+            //     );
+            //   },
+            //   child: Text('View System Log'),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -130,18 +139,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
           return Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  
-                  // _buildDataCard(
-                  //     'Tank Level', '$tankLevel%', Icons.thermostat),
-                  _buildDataCard(
-                      'Containers Filled', '$bottlesFilled', Icons.local_drink),
-                  _buildDataCard(
-                      'Speed', '$systemTemperature RPM', Icons.speed),
-                ],
-              ),
+              _buildDataCard(
+                  'Containers Filled', '$bottlesFilled', Icons.local_drink),
+              _buildDataCard(
+                  'Motor Speed', '$systemTemperature RPM', Icons.speed),
               Row(
                 children: [],
               ),
@@ -154,7 +155,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
   Widget _buildDataCard(String title, String value, IconData icon) {
     return Card(
-      elevation: 5,
+      elevation: 10,
       margin: EdgeInsets.all(10),
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -162,18 +163,18 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           children: [
             Icon(
               icon,
-              size: 40,
+              size: 100,
               color: Colors.blue,
             ),
             SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 5),
             Text(
               value,
-              style: TextStyle(fontSize: 24),
+              style: TextStyle(fontSize: 28),
             ),
           ],
         ),
@@ -182,7 +183,20 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 }
 
-class SystemControlButtons extends StatelessWidget {
+class SystemControlButtons extends StatefulWidget {
+  @override
+  State<SystemControlButtons> createState() => _SystemControlButtonsState();
+}
+
+class _SystemControlButtonsState extends State<SystemControlButtons> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  void updateFirebase(String button) {
+    _firestore.collection('controls').doc('arduino_controls').set({
+      button: true,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -192,6 +206,7 @@ class SystemControlButtons extends StatelessWidget {
           onPressed: () {
             // Function to start the system
             // Add your logic here
+            updateFirebase('stop');
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.green, // Set the button color
@@ -215,7 +230,8 @@ class SystemControlButtons extends StatelessWidget {
           onPressed: () {
             // Function to stop the system
             // Add your logic here
-            _showStopReasonDialog(context);
+            // _showStopReasonDialog(context);
+            updateFirebase('stop');
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.red, // Set the button color
